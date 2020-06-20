@@ -1,4 +1,5 @@
 import unittest
+import sys
 
 
 class TestStringMethods(unittest.TestCase):
@@ -25,6 +26,25 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(s.split(), ['hello', 'world'])
         with self.assertRaises(TypeError):
             s.split(2)
+
+
+# Using some unittest decorators
+class MyTestCase(unittest.TestCase):
+
+    # just skip this test
+    @unittest.skip('demonstrating skipping')
+    def test_nothing(self):
+        self.fail("shouldn't happen")
+
+    # skip test if condition is True
+    @unittest.skipIf(sys.platform.startswith("win"), "Test is not supported in Windows platform")
+    def test_format(self):
+        pass
+
+    # skip test if condition is False
+    @unittest.skipUnless(sys.platform.startswith("notwin"), 'notwin is required')
+    def test_windows_support(self):
+        pass
 
 
 if __name__ == '__main__':
