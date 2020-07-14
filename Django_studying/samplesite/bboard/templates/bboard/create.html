@@ -1,24 +1,12 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type"
-        content = "text/html; charset=utf-8">
-        <title> Добавление обьявления - Доска обьявлений </title>
-    </head>
-    <body>
-        <h1> Добавление Обьявления </h1>
-        <div>
-            <a href="{% url 'index' %}"> Главная </a>
-            {% for rubric in rubrics %}
-            <a href="{% url 'by_rubric' rubric.pk %}"> {{rubric.name }} </a>
-            {% endfor %}
-            <a href="{% url 'add' %}"> Добавить </a>
-        </div>
-        <form method="post">
+{% extends 'layout/basic.html' %}
+
+{% block title %} Добавления обьявления {% endblock %}
+
+{% block content %}
+<h1> Добавление Обьявления </h1>
+<form method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="Добавить">
-        </form>
-    </body>
-
-</html>
+</form>
+{% endblock %}
