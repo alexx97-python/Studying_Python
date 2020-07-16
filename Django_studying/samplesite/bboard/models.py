@@ -1,12 +1,20 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Bb(models.Model):
+    KINDS = (
+        (None, 'Выберете разряд публикуемого обьявления'),
+        ('b', 'Куплю'),
+        ('s', 'Продам'),
+        ('c', 'Обменяю')
+    )
     title = models.CharField(max_length=50, verbose_name='Товар')
     content = models.TextField(null=True, blank=True, verbose_name='Описание')
     price = models.FloatField(null=True, blank=True, verbose_name='Цена')
     published = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name='Опубликовано')
     rubric = models.ForeignKey('Rubric', null=True, on_delete=models.PROTECT, verbose_name='Рубрика')
+    kind = models.CharField(max_length=1, choices=KINDS, default='b', verbose_name='Вид обьявления')
 
     class Meta:
         verbose_name_plural = 'Обьявления'
@@ -25,3 +33,7 @@ class Rubric(models.Model):
         verbose_name = 'Рубрика'
         ordering = ['name']
 
+
+class AdvUser(models.Model):
+    is_activated = models.BooleanField(default=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
