@@ -4,7 +4,8 @@ from django.template import loader
 from django.views.generic.edit import CreateView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
-from django.views.generic.edit import FormView
+from django.views.generic.edit import FormView, UpdateView,DeleteView
+from django.views.generic.dates import ArchiveIndexView
 
 from .models import Bb, Rubric
 from .forms import BbForm
@@ -31,15 +32,28 @@ class BbCreateView(CreateView):
         return context
 
 
-def index(request):
-    bbs = Bb.objects.all()
-    rubrics = Rubric.objects.all()
-    context = {'bbs': bbs, 'rubrics': rubrics}
-    return render(request, 'bboard/index.html', context)
+class BbIndexView(ArchiveIndexView):
+    model = Bb
+    date_field = 'published'
+    template_name = 'bboard/index.html'
+    context_object_name = 'bbs'
+    allow_empty = True
+
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['rubrics'] = Rubric.objects.all()
+        return context
+
+# def index(request):
+#    bbs = Bb.objects.all()
+#    rubrics = Rubric.objects.all()
+#    context = {'bbs': bbs, 'rubrics': rubrics}
+#   return render(request, 'bboard/index.html', context)
 
 
 class BbByRubricView(ListView):
-    template_name='bboard/by_rubric.html'
+    template_name = 'bboard/by_rubric.html'
     context_object_name = 'bbs'
 
     def get_queryset(self):
@@ -83,8 +97,7 @@ class BbAddView(FormView):
                        kwargs={'rubric_id': self.object.cleaned_data['rubric'].pk})
 
 
-
-#def add_and_save(request):
+# def add_and_save(request):
 #    if request.method == 'POST':
 #        bbf = BbForm(request.POST)
 #        if bbf.is_valid():
@@ -98,3 +111,23 @@ class BbAddView(FormView):
 #        bbf = BbForm()
 #        context = {'form': bbf}
 #        return render(request, 'bboard/create.html', context)
+
+class BbEditView(UpdateView):
+    model = Bb
+    form_class = BbForm
+    success_url = reverse_lazy('index')
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['rubrics'] = Rubric.objects.all()
+        return context
+
+
+class BbDeleteView(DeleteView):
+    model = Bb
+    success_url = reverse_lazy('index')
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['rubrics'] = Rubric.objects.all()
+        return context

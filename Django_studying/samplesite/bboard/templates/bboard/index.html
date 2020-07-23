@@ -8,6 +8,15 @@
             <p> <a href='/bboard/{{ bb.rubric.pk }}/'>
             {{ bb.rubric.name }} </a> </p>
             <p> {{ bb.published|date:"d.m.Y H:i:s" }} </p>
+            <p>
+                <a href="{% url 'edit' pk=bb.pk %}"> Исправить </a>
+                <a href="{% url 'delete' pk=bb.pk %}"> Удалить </a>
+            </p>
         </div>
+        <p>
+            {% for d in date_list %}
+            {{ d.year }}
+            {% endfor %}
+        </p>
 {% endfor %}
 {% endblock %}
