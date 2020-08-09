@@ -39,7 +39,6 @@ class BbIndexView(ArchiveIndexView):
     context_object_name = 'bbs'
     allow_empty = True
 
-
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
         context['rubrics'] = Rubric.objects.all()

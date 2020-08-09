@@ -43,7 +43,7 @@ def update_task(request, pk):
 def delete_task(request, pk):
     """
     This view is used to delete a specific instance of Task
-    
+
     """
     item = Task.objects.get(id=pk)
 
