@@ -29,7 +29,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'bboard.apps.BboardConfig',
-    'machine.apps.MachineConfig'
+    'machine.apps.MachineConfig',
+    'captcha'
 ]
 
 MIDDLEWARE = [
